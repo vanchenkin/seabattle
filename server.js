@@ -17,6 +17,24 @@ function getRandom(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function shipCellCount() {
+	let cnt = 0;
+	for(let i of config.ships)
+		cnt+=i[0]*i[1];
+	return cnt;
+}
+
+function makeEmptyArray(){
+	let t = [];
+	for(i = 0; i < config.width; i++){
+		let tmp = [];
+		for(j = 0; j < config.height; j++)
+			tmp.push(config.state.EMPTY);
+		t.push(tmp);
+	}
+	return t;
+}
+
 function generateShip(count){
 	let ship = [];
 	let ix = 0, jx = 0;
@@ -53,7 +71,7 @@ function generateShip(count){
 }
 
 function generateRandomField(){
-	let field = config.makeEmptyArray();
+	let field = makeEmptyArray();
 	let ships = [];
 	let flag = false;
 	while(!flag){
@@ -155,7 +173,7 @@ function makeTurn(id, turn, x,y){
 		for(let x of i)
 			if(x == config.state.BLOWN)
 				cnt1++;
-	if(cnt0 == config.shipCellCount()){
+	if(cnt0 == shipCellCount()){
 		io.to(games[id].user[0]).emit('end', {
 			type: 1,
 			field: games[id].field[1].field,
@@ -164,7 +182,7 @@ function makeTurn(id, turn, x,y){
 			type: 1,
 			field: games[id].field[0].field,
 		});
-	}else if(cnt1 == config.shipCellCount()){
+	}else if(cnt1 == shipCellCount()){
 		io.to(games[id].user[0]).emit('end', {
 			type: 0,
 			field: games[id].field[1].field,

@@ -11,7 +11,6 @@ var config = {
 	width: 10,
 	height: 10,
     ships: [[1,4], [2,3], [3,2], [4,1]],
-    //ships: [[1,4]],
     shipCellCount: () => {
         let cnt = 0;
         for(let i of config.ships)
