@@ -26,9 +26,9 @@ function shipCellCount() {
 
 function makeEmptyArray(){
 	let t = [];
-	for(i = 0; i < config.width; i++){
+	for(let i = 0; i < config.width; i++){
 		let tmp = [];
-		for(j = 0; j < config.height; j++)
+		for(let j = 0; j < config.height; j++)
 			tmp.push(config.state.EMPTY);
 		t.push(tmp);
 	}

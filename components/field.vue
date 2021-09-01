@@ -4,7 +4,7 @@
         <div class="field_text" v-else>Поле противника</div>
         <div class="field">
             <div class="row" v-for="(i, x) in field" :key="x">
-                <div v-on:click="cellClick(x,y)" class="cell" v-for="(item, y) in i" :key="y" :class="[(item == 1) ? 'ship_style' : '', (item == 0) ? 'empty_style' : '', (item == 2) ? 'shot_style' : '', (item == 3) ? 'killed_style' : '', (item == 4) ? 'blown_style' : '']"></div>
+                <div v-on:click="cellClick(x,y)" class="cell" v-for="(item, y) in i" :key="y" :class="corrTable[item]"></div>
             </div>
         </div>
     </div>
@@ -51,10 +51,16 @@
 
 <script>
     export default {
+        data: function () {
+            return {
+                corrTable: ['empty_style', 'ship_style', 'shot_style', 'killed_style', 'blown_style'],
+            }
+        },
         props:['field', 'type', 'turn'],
         methods: {
             cellClick: function(x,y){
-                if(this.type < 0 || this.turn != this.type) return;
+                if(this.type < 0 || this.turn != this.type)
+                    return;
                 socket.emit("click", {x: x, y: y});
             },
         },

@@ -10,9 +10,9 @@
         </div>
         <template v-else>
             <div class="connect">
-                <button class="button_create" v-on:click="create_game">Создать игру</button>
+                <button class="button_create" v-on:click="createGame">Создать игру</button>
                 <div class="form">
-                    <span>Присоединиться к игре:</span> <input v-model="code" type="text" class="input_code" placeholder="код приглашения"> <button class="button_join" v-on:click="join_game">Ок</button>
+                    <span>Присоединиться к игре:</span> <input v-model="code" type="text" class="input_code" placeholder="код приглашения"> <button class="button_join" v-on:click="joinGame">Ок</button>
                 </div>
             </div>
         </template>
@@ -64,12 +64,12 @@
     export default {
         data() {
             return {
-                connected: false,
-                status: null,
-                turn: -2,
+                connected: false, //status of user connection
+                status: null, //visible text status
+                turn: -2, //turn number
                 field1: [],
                 field2: [],
-                code: '',
+                code: '', //connection code
                 type: null,
             }
         },
@@ -81,7 +81,7 @@
             });
             socket.on("create_response", (data)=>{
                 this.field1 = data.field;
-                this.field2 = config.makeEmptyArray();
+                this.field2 = this.makeEmptyArray();
                 this.connected = true;
                 this.turn = -1;
                 this.status = "Код приглашения: "+data.id;
@@ -92,7 +92,7 @@
                     return;
                 }
                 this.field1 = data.field;
-                this.field2 = config.makeEmptyArray();
+                this.field2 = this.makeEmptyArray();
                 this.connected = true;
             });
             socket.on("start", (data)=>{
@@ -136,10 +136,20 @@
             });
         },
         methods: {
-            create_game: function(){
+            makeEmptyArray: function(){
+                let t = [];
+                for(let i = 0; i < config.width; i++){
+                    let tmp = [];
+                    for(let j = 0; j < config.height; j++)
+                        tmp.push(config.state.EMPTY);
+                    t.push(tmp);
+                }
+                return t;
+            },
+            createGame: function(){
                 socket.emit("create");
             },
-            join_game: function(){
+            joinGame: function(){
                 socket.emit("join", this.code);
             },
             changeCellFeild1(row, col, value) {
